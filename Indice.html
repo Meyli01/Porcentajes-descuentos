@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="./startbootstrap-scrolling-nav-gh-pages/css/style4.css" />
+</head>
+
+<body>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div class="contenedor">
+    <br />
+    
+    <h1 id="titulo">PERCENTA</h1>
+    <div class="botones">
+      <button id="btnEjercicio1" class="btn btn-primary">Ejercicio 1</button>
+      <button id="btnEjercicio2" class="btn btn-secondary">Ejercicio 2</button>
+      <button id="btnEjercicio3" class="btn btn-success">Ejercicio 3</button>
+      <button id="btnEjercicio4" class="btn btn-info">Ejercicio 4</button>
+      <button id="btnEjercicio5" class="btn btn-danger">Ejercicio 5</button>
+      <div id="textoSalida"></div>
+      <input type="text" id="valorInput" />
+      <button id="botonEnviar" class="btn btn-primary">Enviar</button>
+      <div id="resultadosGrafico"></div> 
+      <div id="resultadosPie"></div>
+    </div>
+
+    <style>
+      .letra-cambiada {
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        color: rgb(255, 255, 255);
+        /* Otros estilos que desees aplicar */
+      }
+    </style>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+      // Obtener referencia a los botones
+      var btnEjercicio1 = document.getElementById("btnEjercicio1");
+      var btnEjercicio2 = document.getElementById("btnEjercicio2");
+      var btnEjercicio3 = document.getElementById("btnEjercicio3");
+      var btnEjercicio4 = document.getElementById("btnEjercicio4");
+      var btnEjercicio5 = document.getElementById("btnEjercicio5");
+
+      // Bloquear todos los botones excepto el primero
+      btnEjercicio2.disabled = true;
+      btnEjercicio3.disabled = true;
+      btnEjercicio4.disabled = true;
+      btnEjercicio5.disabled = true;
+
+      // Agregar eventos de clic a los botones
+      btnEjercicio1.addEventListener("click", function () {
+        mostrarTexto("Un artículo tiene un precio original de $200. Aplica un descuento del 20%. ¿Cuál es el precio final?");
+        bloquearBotones();
+        habilitarSiguienteBoton(btnEjercicio2);
+        numeroEjercicio = 1;
+      });
+
+      btnEjercicio2.addEventListener("click", function () {
+        mostrarTexto("Una tienda ofrece un descuento del 15% en todos los productos. Si un televisor tiene un precio original de $800, ¿cuál es el precio final después del descuento?");
+        bloquearBotones();
+        habilitarSiguienteBoton(btnEjercicio3);
+        numeroEjercicio = 2;
+      });
+
+      btnEjercicio3.addEventListener("click", function () {
+        mostrarTexto("Una tienda tiene una promoción en la que ofrece un descuento del 30% en ciertos productos. Si un artículo tiene un precio original de $50, ¿cuánto es el descuento y cuál es el precio final?");
+        bloquearBotones();
+        habilitarSiguienteBoton(btnEjercicio4);
+        numeroEjercicio = 3;
+      });
+
+      btnEjercicio4.addEventListener("click", function () {
+        mostrarTexto("Un artículo tiene un precio original de $120. Aplica un descuento del 25%. ¿Cuál es el precio final?");
+        bloquearBotones();
+        habilitarSiguienteBoton(btnEjercicio5);
+        numeroEjercicio = 4;
+      });
+
+      btnEjercicio5.addEventListener("click", function () {
+        mostrarTexto("En una tienda, un producto tiene un precio original de $50, pero se aplica un descuento del 40%. ¿Cuál es el precio final?");
+        bloquearBotones();
+        numeroEjercicio = 5;
+      });
+
+      // Función para mostrar el texto en el elemento correspondiente
+      function mostrarTexto(texto) {
+        var textoSalida = document.getElementById("textoSalida");
+        textoSalida.innerHTML = texto;
+        textoSalida.classList.add("letra-cambiada"); // Agrega la clase CSS al elemento
+        textoSalida.style.justifyContent = "center";
+        textoSalida.style.alignItems = "center";
+      }
+
+      // Función para bloquear los botones
+      function bloquearBotones() {
+        btnEjercicio1.disabled = true;
+        btnEjercicio2.disabled = true;
+        btnEjercicio3.disabled = true;
+        btnEjercicio4.disabled = true;
+        btnEjercicio5.disabled = true;
+      }
+
+      // Función para habilitar el siguiente botón
+      function habilitarSiguienteBoton(siguienteBoton) {
+        siguienteBoton.disabled = false;
+      }
+    </script>
+
+    <script>
+      // Definir una variable para almacenar el número del ejercicio actual
+      var numeroEjercicio = 1;
+      var resultadosEsperados = [40, 680, 35, 90, 30];
+      var resultados = [];
+      var respuestasCorrectas = [];
+      var respuestasIncorrectas = [];
+
+      // Obtener referencia al cuadro de texto y al botón de enviar
+      var inputValor = document.getElementById("valorInput");
+      var botonEnviar = document.getElementById("botonEnviar");
+
+      // Agregar evento de clic al botón de enviar
+      botonEnviar.addEventListener("click", function () {
+        var valor = inputValor.value; // Obtener el valor ingresado en el cuadro de texto
+        var resultadoEsperado = resultadosEsperados[numeroEjercicio - 1];
+        var resultado = parseFloat(valor);
+
+        if (resultado === resultadoEsperado) {
+          mostrarResultado("¡Correcto!");
+          respuestasCorrectas.push(1);
+          habilitarSiguienteBoton();
+          resultados.push(resultadoEsperado);
+        } else {
+          mostrarResultado("Incorrecto");
+          respuestasIncorrectas.push(1);
+          resultados.push(0);
+        }
+
+        inputValor.value = ""; // Limpiar el cuadro de texto
+
+        // Calcular y mostrar la media al terminar todas las respuestas
+        if (resultados.length === resultadosEsperados.length) {
+          calcularYMostrarMedia();
+        }
+      });
+
+      // Función para mostrar el resultado
+      function mostrarResultado(mensaje) {
+        document.getElementById("textoSalida").textContent = mensaje;
+      }
+
+      // Función para calcular y graficar la media de los resultados
+      function calcularYMostrarMedia() {
+        var suma = resultados.reduce(function (a, b) {
+          return a + b;
+        }, 0);
+        var media = suma / resultados.length;
+
+        var data = [
+          {
+            x: resultadosEsperados.map(function (_, i) {
+              return "Ejercicio " + (i + 1);
+            }),
+            y: resultados,
+            type: "bar"
+          }
+        ];
+
+        var layout = {
+          title: "Resultados de los ejercicios",
+          xaxis: {
+            title: "Ejercicio"
+          },
+          yaxis: {
+            title: "Resultado"
+          }
+        };
+
+        
+
+        // Crear el array "valores" utilizando las variables "respuestasCorrectas" y "respuestasIncorrectas"
+        var valores = [respuestasIncorrectas.length, respuestasCorrectas.length];
+        var etiquetas = ["Incorrectas", "Correctas"];
+
+        // Crear el objeto de datos para el gráfico de pastel
+        var dataPie = [{
+          values: valores,
+          labels: etiquetas,
+          type: "pie"
+        }];
+
+        // Definir el diseño del gráfico de pastel
+        var layoutPie = {
+          title: "Distribución de resultados",
+        };
+
+        // Crear el gráfico de pastel utilizando Plotly
+        Plotly.newPlot("resultadosPie", dataPie, layoutPie);
+
+      }
+    </script>
+
+  </div>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+.botones{
+    align-items: center;
+    align-content: center;
+    padding: 30px;
+}
+
+.Eje{
+    color: white;
+    text-decoration: none;
+}
+.contenedor{
+	background-repeat: no-repeat;
+	font-family: arial;
+	position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: inline-block;
+
+    font-size: 45px;
+    font-weight: bold;
+    background: linear-gradient(150deg, #ff0202,  #6f7acc, #4cd2ba);
+    background-size: 400% 300%;
+    animation: BgGradient 5s ease infinite;
+}
+@keyframes BgGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+#textoSalida {
+    margin-top: 50px;
+    font-size: 25px;
+}
+.kahoot-buttons {
+    display: none;
+  }
+  #valorInput{
+    width: 150px;
+    height: 40px;
+  }
+  #titulo {
+    color: #fdfdfd; /* Cambia el color del texto a rojo */
+    font-size: 44px; /* Cambia el tamaño de la fuente a 24 píxeles */
+    font-family: Arial, sans-serif; /* Cambia la fuente a Arial o una fuente sans-serif */
+    text-align: center; /* Centra el texto */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    -webkit-background-clip: text;
+    font-family: 'Arial Black', sans-serif;
+  }
